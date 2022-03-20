@@ -208,7 +208,11 @@ public class Level {
             updateObservers();
         }
     }
-
+    public  void  resetGhostLocation(){
+        for (final Ghost npc : npcs.keySet()) {
+           npc.resetLocation();
+        }
+    }
     /**
      * Stops or pauses this level, no longer allowing any movement on the board
      * and stopping all NPCs.
@@ -263,6 +267,12 @@ public class Level {
      * Updates the observers about the state of this level.
      */
     private void updateObservers() {
+        if(doesAnyPlayerDied()){
+            for (LevelObserver observer : observers) {
+                observer.restartLevel();
+            }
+
+        }
         if (!isAnyPlayerAlive()) {
             for (LevelObserver observer : observers) {
                 observer.levelLost();
@@ -273,6 +283,22 @@ public class Level {
                 observer.levelWon();
             }
         }
+        resetAllPlayerDiedToFalse();
+    }
+
+    private void resetAllPlayerDiedToFalse() {
+        for (Player player : players) {
+            player.setDied(false);
+        }
+    }
+
+    private boolean doesAnyPlayerDied() {
+        for (Player player : players) {
+            if (player.isDied()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -297,11 +323,11 @@ public class Level {
      * @return The amount of pellets remaining on the board.
      */
     public int remainingPellets() {
-        Board board = getBoard();
+        Board updatedLiveBoard = getBoard();
         int pellets = 0;
-        for (int x = 0; x < board.getWidth(); x++) {
-            for (int y = 0; y < board.getHeight(); y++) {
-                for (Unit unit : board.squareAt(x, y).getOccupants()) {
+        for (int x = 0; x < updatedLiveBoard.getWidth(); x++) {
+            for (int y = 0; y < updatedLiveBoard.getHeight(); y++) {
+                for (Unit unit : updatedLiveBoard.squareAt(x, y).getOccupants()) {
                     if (unit instanceof Pellet) {
                         pellets++;
                     }
@@ -371,5 +397,7 @@ public class Level {
          * this event is received.
          */
         void levelLost();
+
+        void  restartLevel();
     }
 }

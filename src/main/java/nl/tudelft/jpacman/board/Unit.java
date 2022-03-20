@@ -14,6 +14,15 @@ public abstract class Unit {
      */
     private Square square;
 
+
+    public Square getInitialSquareLocation() {
+        return initialSquareLocation;
+    }
+
+    private boolean setInitialSquare = true;
+
+    private  Square initialSquareLocation;
+
     /**
      * The direction this unit is facing.
      */
@@ -72,7 +81,10 @@ public abstract class Unit {
      */
     public void occupy(Square target) {
         assert target != null;
-
+        if(setInitialSquare){
+            this.initialSquareLocation = target;
+                this.setInitialSquare = false;
+        }
         if (square != null) {
             square.remove(this);
         }
@@ -125,5 +137,9 @@ public abstract class Unit {
         }
 
         return destination;
+    }
+
+    public void resetLocation(){
+        this.occupy(this.initialSquareLocation);
     }
 }

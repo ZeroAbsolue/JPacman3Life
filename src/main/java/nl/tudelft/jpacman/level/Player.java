@@ -3,6 +3,7 @@ package nl.tudelft.jpacman.level;
 import java.util.Map;
 
 import nl.tudelft.jpacman.board.Direction;
+import nl.tudelft.jpacman.board.Square;
 import nl.tudelft.jpacman.board.Unit;
 import nl.tudelft.jpacman.sprite.AnimatedSprite;
 import nl.tudelft.jpacman.sprite.Sprite;
@@ -18,6 +19,21 @@ public class Player extends Unit {
      * The amount of points accumulated by this player.
      */
     private int score;
+
+    /**
+     * The number of remain life.
+     */
+    private int remainLifeNumber;
+
+    public boolean isDied() {
+        return died;
+    }
+
+    public void setDied(boolean died) {
+        this.died = died;
+    }
+
+    private boolean died = false;
 
     /**
      * The animations for every direction.
@@ -49,6 +65,7 @@ public class Player extends Unit {
      */
     protected Player(Map<Direction, Sprite> spriteMap, AnimatedSprite deathAnimation) {
         this.score = 0;
+        this.remainLifeNumber = 3;
         this.alive = true;
         this.sprites = spriteMap;
         this.deathSprite = deathAnimation;
@@ -127,5 +144,13 @@ public class Player extends Unit {
      */
     public void addPoints(int points) {
         score += points;
+    }
+
+    public int getRemainLifeNumber(){
+        return this.remainLifeNumber;
+    }
+
+    public void decrementRemainLifeNumber(){
+        this.remainLifeNumber--;
     }
 }

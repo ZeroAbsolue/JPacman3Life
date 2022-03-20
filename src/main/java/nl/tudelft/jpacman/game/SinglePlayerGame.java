@@ -7,6 +7,7 @@ import nl.tudelft.jpacman.level.Player;
 
 import com.google.common.collect.ImmutableList;
 import nl.tudelft.jpacman.points.PointCalculator;
+import nl.tudelft.jpacman.sprite.PacManSprites;
 
 /**
  * A game with one player and a single level.
@@ -54,5 +55,11 @@ public class SinglePlayerGame extends Game {
     @Override
     public Level getLevel() {
         return level;
+    }
+
+    @Override
+    public void restartLevel() {
+        this.level.resetGhostLocation();
+        this.player.resetLocation();
     }
 }
